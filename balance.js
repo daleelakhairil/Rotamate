@@ -1,26 +1,40 @@
-const housemates = [
-{name: "Alex", paid: 90}, //name and paid is an object, in a curly braces is an object
-{name: "Sam", paid: 60}, // the bracket itself is an object, an ordered list of things
-{name: "Jo", paid: 0},
-{name: "Mia", paid: 0}
+const { calculateNets, settleUp } = require("./logic.js");
+
+const rumahDaleela = [
+  { name: "Daleela", paid: 0 },
+  { name: "Farah", paid: 180 },
+  { name: "Jiha", paid: 0 },
+  { name: "Riena", paid: 0 },
+  { name: "Hani", paid: 0 },
+  { name: "Nurin", paid: 0 },
 ];
 
-let total1 = 0;
-for (const person of housemates) {
-    console.log(person.name, "paid", person.paid);
-    total1 = total1 + person.paid;
+const bayaranBalik = calculateNets(rumahDaleela);
+
+const penghutang = [];
+for (const person of bayaranBalik) {
+  if (person.net < 0) {
+    penghutang.push(person);
+  }
 }
 
-const share = total1 / housemates.length;
-console.log(housemates.length);
-
-let netTotal = 0;
-for (person of housemates) {
-    net = person.paid - share;
-    netTotal = netTotal + net;
+const dihutang = [];
+for (const person of bayaranBalik) {
+  if (person.net > 0) {
+    dihutang.push(person);
+  }
 }
 
-console.log("Total", total1);
-const share1 = total1 / housemates.length;
-console.log("Fair share each: ", share1);
-console.log("Sum of Net: ", netTotal);
+const debtors = [];
+for (const person of penghutang) {
+  debtors.push({ name: person.name, amount: -person.net });
+}
+
+const creditors = [];
+for (const person of dihutang) {
+  creditors.push({ name: person.name, amount: person.net });
+}
+
+const results = settleUp(debtors, creditors);
+console.log("this is the payments log", results);
+
